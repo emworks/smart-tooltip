@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "module": "commonjs",
+        "target": "es5",
+        "noEmitOnError": true,
+        "outDir": "./public/dist/",
+        "strict": true,
+        "baseUrl": "./",
+        "paths": {
+            "*": [
+                "./*"
+            ]
+        },
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "noImplicitAny": false,
+        "noImplicitThis": false
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

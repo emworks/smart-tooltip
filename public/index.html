@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tooltip Demo</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button {
+            display: inline-block;
+            height: 40px;
+            width: 200px;
+            border-radius: 15px;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <button id="first">Кнопка раз</button>
+
+    <script>
+        // emulate delay-attached node
+        const secondBtn = document.createElement('button');
+        secondBtn.id = 'second';
+        secondBtn.textContent = 'Кнопка два';
+        setTimeout(() => {
+            document.body.appendChild(secondBtn);
+        }, 1000);
+    </script>
+    
+    <script src='dist/bundle.js' data-user='admin'></script>
+</body>
+</html>

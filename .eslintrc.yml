@@ -1,0 +1,26 @@
+extends:
+  - "prettier"
+  - "plugin:@typescript-eslint/eslint-recommended"
+  - "plugin:@typescript-eslint/recommended"
+parser: "@typescript-eslint/parser"
+parserOptions:
+  sourceType: "module"
+plugins:
+  - "prettier"
+  - "@typescript-eslint"
+env:
+  node: true
+  browser: true
+  es6: true
+rules:
+  prettier/prettier: ['error']
+  max-len: ["error", {
+    "code": 120,
+    "ignoreComments": true,
+    "ignoreUrls": true
+  }]
+  import/prefer-default-export: "off"
+  import/no-unresolved: "off"
+  import/extensions: "off"
+  "no-console": ["error", { allow: ["warn", "error"] }]
+  "no-param-reassign": "off"
