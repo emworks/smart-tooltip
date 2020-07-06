@@ -19,6 +19,7 @@ class App {
   constructor({ user }: AppProps) {
     this.context = { user };
     this.Intro.oncomplete(() => post(api.tooltip, this.context));
+    globalThis.IntroJS = this.api;
   }
 
   get context(): TooltipContext {
@@ -27,6 +28,16 @@ class App {
 
   set context(ctx: TooltipContext) {
     Object.assign(this.ctx, ctx);
+  }
+
+  get api(): Record<string, () => unknown> {
+    // proxy intro.js API to the global scope
+    // https://introjs.com/docs/intro/api/#api
+    return {
+      goToStep: this.Intro.goToStep.bind(this.Intro),
+      start: this.Intro.start.bind(this.Intro),
+      __lib: this.Intro,
+    };
   }
 
   async init(): Promise<void> {

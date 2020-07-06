@@ -36,9 +36,8 @@
         const secondBtn = document.createElement('button');
         secondBtn.id = 'second';
         secondBtn.textContent = 'Кнопка два';
-        setTimeout(() => {
-            document.body.appendChild(secondBtn);
-        }, 1000);
+        secondBtn.onclick = () => IntroJS.goToStep(1).start();
+        setTimeout(() => document.body.appendChild(secondBtn), 1000);
     </script>
     
     <script src='dist/bundle.js' data-user='admin'></script>
