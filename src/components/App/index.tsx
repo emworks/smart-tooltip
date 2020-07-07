@@ -1,9 +1,17 @@
 import introJs from 'intro.js';
 
-import { TooltipPosition, TooltipContext } from 'src/types';
+import {
+  Tooltip,
+  TooltipPosition,
+  TooltipContext,
+  TooltipStep,
+  DOMEventMap,
+  CustomEventMap,
+  TooltipEvent,
+} from 'src/types';
 
 import { api } from 'src/variables';
-import { get, post } from 'src/services/http';
+import { getEvent, getTooltip, postTooltip } from 'src/services/http';
 
 import { useExternalRefs } from 'src/hooks/useExternalRefs';
 
@@ -16,9 +24,16 @@ class App {
 
   private ctx: TooltipContext = {};
 
+  private data: Array<Tooltip> = [];
+
+  private steps: Array<TooltipStep> = [];
+
+  private eventData: Array<TooltipEvent> = [];
+
+  private events: Array<any> = [];
+
   constructor({ user }: AppProps) {
     this.context = { user };
-    this.Intro.oncomplete(() => post(api.tooltip, this.context));
     globalThis.IntroJS = this.api;
   }
 
@@ -46,25 +61,102 @@ class App {
       uri: window.location.pathname,
     };
 
-    const data = await get(api.tooltip, this.context);
+    await this.initData();
+    await this.bindEvents();
+  }
 
-    const selectors = data.map(({ selector }) => selector);
+  async initData(): Promise<void> {
+    this.data = await getTooltip(api.tooltip, this.context);
+
+    const selectors = this.data.map(({ selector }) => selector);
 
     try {
       const refs = await useExternalRefs(selectors);
 
       const normalize = this.getNormalizer(refs);
-      const steps = data.map(normalize);
+      this.steps = this.data.map(normalize);
 
-      if (steps.length) {
-        this.Intro.addSteps(steps).start();
+      if (this.steps.length) {
+        this.Intro.addSteps(this.steps).start();
       }
     } catch (err) {
       console.error(err);
     }
   }
 
-  getNormalizer = (refs) => ({ selector, content, position = TooltipPosition.AUTO }) => ({
+  get customEvents(): Record<string, (CustomEvent) => void> {
+    return {
+      [CustomEventMap.TOOLTIP_SHOW]: ({ detail: { target } }) => {
+        const step = this.data.findIndex((item) => item.id == target);
+        step === 0 ? this.Intro.start() : this.Intro.goToStep(step).start();
+      },
+      [CustomEventMap.TOOLTIP_HIDE]: () => {
+        this.Intro.exit();
+      },
+    };
+  }
+
+  async bindEvents(): Promise<void> {
+    const triggerEvent = this.triggerEvent.bind(this);
+
+    if (this.eventData.length) {
+      this.unbindEvents();
+    }
+
+    this.Intro.oncomplete(() => postTooltip(api.tooltip, this.context));
+
+    this.Intro.onchange((target) => {
+      const current = this.steps.find((step: TooltipStep) => step.element === target);
+      if (current) {
+        triggerEvent(CustomEventMap.TOOLTIP_VISIBLE, {
+          detail: { current },
+        });
+      }
+    });
+
+    this.eventData = await getEvent(api.event, this.context);
+
+    this.eventData.forEach(this.bindEvent.bind(this));
+
+    Object.keys(this.customEvents).forEach((eventType) => {
+      this.registerEvent(document, eventType, this.customEvents[eventType]);
+    });
+  }
+
+  bindEvent({ eventType, source, trigger, target }: TooltipEvent): void {
+    if (Object.values(DOMEventMap).includes(eventType as DOMEventMap)) {
+      const eventSource = document.querySelector(source);
+      const triggerEvent = this.triggerEvent.bind(this);
+      this.registerEvent(eventSource, eventType, () =>
+        triggerEvent(trigger, {
+          detail: { target },
+        })
+      );
+    } else {
+      this.registerEvent(document, eventType, ({ detail: { current } }: CustomEvent) => {
+        if (current.id == source) {
+          const eventTarget = document.querySelector(target);
+          eventTarget && eventTarget[trigger]();
+        }
+      });
+    }
+  }
+
+  registerEvent(target, type, listener): void {
+    target.addEventListener(type, listener);
+    this.events.push({ target, type, listener });
+  }
+
+  unbindEvents(): void {
+    this.events.forEach(({ target, type, listener }) => target.removeEventListener(type, listener));
+  }
+
+  triggerEvent(type: string, data: any): void {
+    document.dispatchEvent(new CustomEvent(type, data));
+  }
+
+  getNormalizer = (refs) => ({ id, selector, content, position = TooltipPosition.AUTO }): TooltipStep => ({
+    id,
     element: refs.get(selector),
     intro: content,
     position,

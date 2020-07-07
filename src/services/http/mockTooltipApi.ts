@@ -2,9 +2,9 @@ import { api } from 'src/variables';
 import { TooltipPosition, Tooltip, TooltipContext } from 'src/types';
 
 // eslint-disable-next-line no-underscore-dangle
-const _data = [
+const _data: Array<Tooltip> = [
   {
-    id: 1,
+    id: '1',
     content: 'Эта кнопка сразу появляется на странице',
     selector: '#first',
     sort: 100,
@@ -15,7 +15,7 @@ const _data = [
     position: TooltipPosition.RIGHT,
   },
   {
-    id: 2,
+    id: '2',
     content: 'А эта - спустя некоторое время',
     selector: '#second',
     sort: 200,
@@ -25,7 +25,7 @@ const _data = [
     isVisible: true,
   },
   {
-    id: 3,
+    id: '3',
     content: 'string 3',
     selector: '#third',
     sort: 300,
@@ -35,7 +35,7 @@ const _data = [
     isVisible: true,
   },
   {
-    id: 4,
+    id: '4',
     content: 'Приветики всем на этой странице',
     selector: '#react-app',
     sort: 400,
@@ -46,12 +46,12 @@ const _data = [
   },
 ];
 
-class MockApi {
-  data!: Array<Tooltip>;
+class MockTooltipApi<TData> {
+  data!: Array<TData>;
 
-  key = 'mockData';
+  key = 'mockTooltipData';
 
-  constructor(data) {
+  constructor(data: Array<TData>) {
     this.data = data;
     if (localStorage) {
       const mockData = localStorage.getItem(this.key);
@@ -70,7 +70,7 @@ class MockApi {
   get = {
     [api.tooltip]: ({ user, host, uri }: TooltipContext) =>
       this.filter(this.data)(user, host, uri)
-        .filter((item) => item.user === user && item.host === host && item.uri === uri && !!item.isVisible)
+        .filter((item) => !!item.isVisible)
         .sort((a, b) => a.sort - b.sort),
   };
 
@@ -92,4 +92,4 @@ class MockApi {
   };
 }
 
-export default new MockApi(_data);
+export default new MockTooltipApi<Tooltip>(_data);

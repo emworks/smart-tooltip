@@ -1,5 +1,5 @@
 export interface BaseTooltip {
-  id: number;
+  id: string;
   content: string;
   selector: string;
   sort: number;
@@ -25,4 +25,29 @@ export interface TooltipContext {
 export interface Tooltip extends BaseTooltip, TooltipContext {
   isVisible: boolean;
   position?: TooltipPosition;
+}
+
+export interface TooltipStep {
+  id: string;
+  element: HTMLElement;
+  intro: string;
+  position: TooltipPosition;
+}
+
+export enum DOMEventMap {
+  CLICK = 'click',
+}
+
+export enum CustomEventMap {
+  TOOLTIP_SHOW = 'tooltipshow',
+  TOOLTIP_HIDE = 'tooltiphide',
+  TOOLTIP_VISIBLE = 'tooltipvisible',
+}
+
+export interface TooltipEvent extends TooltipContext {
+  id: string;
+  eventType: DOMEventMap | CustomEventMap;
+  source: string;
+  trigger: DOMEventMap | CustomEventMap;
+  target: string;
 }

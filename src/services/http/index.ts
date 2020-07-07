@@ -1,10 +1,11 @@
 import { TooltipContext } from 'src/types';
 
-import MockApi from './mockApi';
+import MockTooltipApi from './mockTooltipApi';
+import MockEventApi from './mockEventApi';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const get = (endpoint: string, context: TooltipContext): Promise<any> => {
-  const getMockData = MockApi.get[endpoint];
+export const createGet = (mockApi: any) => (endpoint: string, context: TooltipContext): Promise<any> => {
+  const getMockData = mockApi.get[endpoint];
   if (!getMockData) {
     Promise.reject(new Error('Not implemented'));
   }
@@ -12,12 +13,18 @@ export const get = (endpoint: string, context: TooltipContext): Promise<any> => 
   return Promise.resolve(data);
 };
 
+export const getEvent = createGet(MockEventApi);
+
+export const getTooltip = createGet(MockTooltipApi);
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const post = (endpoint: string, context: TooltipContext): Promise<any> => {
-  const postMockData = MockApi.post[endpoint];
+export const createPost = (mockApi: any) => (endpoint: string, context: TooltipContext): Promise<any> => {
+  const postMockData = mockApi.post[endpoint];
   if (!postMockData) {
     Promise.reject(new Error('Not implemented'));
   }
   const data = postMockData(context);
   return Promise.resolve(data);
 };
+
+export const postTooltip = createPost(MockTooltipApi);
