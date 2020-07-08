@@ -4,6 +4,7 @@ import {
   Tooltip,
   TooltipPosition,
   TooltipContext,
+  TooltipTrigger,
   TooltipStep,
   DOMEventMap,
   CustomEventMap,
@@ -14,6 +15,8 @@ import { api } from 'src/variables';
 import { getEvent, getTooltip, postTooltip } from 'src/services/http';
 
 import { useExternalRefs } from 'src/hooks/useExternalRefs';
+
+import './index.scss';
 
 type AppProps = {
   user: string;
@@ -77,18 +80,31 @@ class App {
       this.steps = this.data.map(normalize);
 
       if (this.steps.length) {
-        this.Intro.addSteps(this.steps).start();
+        // a workaround to initialize intro.js without starting a demo
+        document.body.classList.add('no-introjs-overlay');
+        this.Intro.addSteps(this.steps).start().exit();
+        setTimeout(() => {
+          document.body.classList.remove('no-introjs-overlay');
+          const firstTooltipIdx = this.data.findIndex(({ trigger }) => !trigger || trigger === TooltipTrigger.AUTO);
+          if (!!~firstTooltipIdx) {
+            this.start(firstTooltipIdx);
+          }
+        }, 500);
       }
     } catch (err) {
       console.error(err);
     }
   }
 
+  start(step?: number): void {
+    step === 0 ? this.Intro.start() : this.Intro.goToStep(step).start();
+  }
+
   get customEvents(): Record<string, (CustomEvent) => void> {
     return {
       [CustomEventMap.TOOLTIP_SHOW]: ({ detail: { target } }) => {
         const step = this.data.findIndex((item) => item.id == target);
-        step === 0 ? this.Intro.start() : this.Intro.goToStep(step).start();
+        this.start(step);
       },
       [CustomEventMap.TOOLTIP_HIDE]: () => {
         this.Intro.exit();

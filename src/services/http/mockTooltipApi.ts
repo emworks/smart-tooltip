@@ -1,5 +1,5 @@
 import { api } from 'src/variables';
-import { TooltipPosition, Tooltip, TooltipContext } from 'src/types';
+import { TooltipPosition, TooltipTrigger, Tooltip, TooltipContext } from 'src/types';
 
 // eslint-disable-next-line no-underscore-dangle
 const _data: Array<Tooltip> = [
@@ -13,6 +13,7 @@ const _data: Array<Tooltip> = [
     uri: '/',
     isVisible: true,
     position: TooltipPosition.RIGHT,
+    trigger: TooltipTrigger.MANUAL,
   },
   {
     id: '2',
@@ -23,6 +24,7 @@ const _data: Array<Tooltip> = [
     host: 'http://localhost:9000',
     uri: '/',
     isVisible: true,
+    trigger: TooltipTrigger.AUTO,
   },
   {
     id: '3',

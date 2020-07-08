@@ -22,9 +22,15 @@ export interface TooltipContext {
   uri?: string;
 }
 
+export enum TooltipTrigger {
+  AUTO = 'auto',
+  MANUAL = 'manual',
+}
+
 export interface Tooltip extends BaseTooltip, TooltipContext {
   isVisible: boolean;
   position?: TooltipPosition;
+  trigger?: TooltipTrigger;
 }
 
 export interface TooltipStep {
