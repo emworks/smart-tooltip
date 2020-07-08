@@ -6,6 +6,9 @@ const createExternalRefsHook = (context) => (selectors, timeout = 3000) => {
   return new Promise((resolve, reject) => {
     const updateRefs = () => {
       const addRef = (selector) => {
+        if (!selector) {
+          return;
+        }
         const node = document.querySelector(selector);
         if (node) {
           refs.set(selector, node);
@@ -26,8 +29,8 @@ const createExternalRefsHook = (context) => (selectors, timeout = 3000) => {
     updateRefs();
 
     setTimeout(() => {
-      const error = new Error(`Found ${refs.size} out in [${selectors}] after ${timeout}ms`);
-      reject(error);
+      console.warn(`Found ${refs.size} out in [${selectors}] after ${timeout}ms`);
+      resolve(refs);
     }, timeout);
   });
 };
