@@ -23,7 +23,7 @@ type AppProps = {
 };
 
 class App {
-  private Intro = introJs();
+  private Intro;
 
   private ctx: TooltipContext = {};
 
@@ -37,7 +37,6 @@ class App {
 
   constructor({ user }: AppProps) {
     this.context = { user };
-    globalThis.IntroJS = this.api;
   }
 
   get context(): TooltipContext {
@@ -54,22 +53,26 @@ class App {
     return {
       goToStep: this.Intro.goToStep.bind(this.Intro),
       start: this.Intro.start.bind(this.Intro),
+      init: this.init.bind(this),
       __lib: this.Intro,
     };
   }
 
-  async init(): Promise<void> {
+  async init(data?: Array<Tooltip>, events?: Array<TooltipEvent>): Promise<void> {
     this.context = {
       host: window.location.origin,
       uri: window.location.pathname,
     };
 
-    await this.initData();
-    await this.bindEvents();
+    this.Intro = introJs();
+    globalThis.IntroJS = this.api;
+
+    await this.initData(data);
+    await this.bindEvents(events);
   }
 
-  async initData(): Promise<void> {
-    this.data = await getTooltip(api.tooltip, this.context);
+  async initData(data?: Array<Tooltip>): Promise<void> {
+    this.data = data || (await getTooltip(api.tooltip, this.context));
 
     const selectors = this.data.map(({ selector }) => selector);
 
@@ -112,7 +115,7 @@ class App {
     };
   }
 
-  async bindEvents(): Promise<void> {
+  async bindEvents(events?: Array<TooltipEvent>): Promise<void> {
     const triggerEvent = this.triggerEvent.bind(this);
 
     if (this.eventData.length) {
@@ -145,7 +148,7 @@ class App {
       }
     });
 
-    this.eventData = await getEvent(api.event, this.context);
+    this.eventData = events || (await getEvent(api.event, this.context));
 
     this.eventData.forEach(this.bindEvent.bind(this));
 

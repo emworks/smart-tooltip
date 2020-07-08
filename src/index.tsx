@@ -5,7 +5,7 @@ const USER_ATTR = 'data-user';
 
 try {
   const script = document.querySelectorAll(`[${USER_ATTR}]`)[0];
-  const user = script.getAttribute(USER_ATTR) || '';
+  const user = script?.getAttribute(USER_ATTR) || '';
 
   new App({ user }).init();
 } catch (err) {
