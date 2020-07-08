@@ -14,6 +14,7 @@ export enum TooltipPosition {
   BOTTOM_MIDDLE = 'bottom-middle-aligned',
   BOTTOM_RIGHT = 'bottom-right-aligned',
   AUTO = 'auto',
+  FLOATING = 'floating',
 }
 
 export interface TooltipContext {

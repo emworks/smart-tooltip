@@ -122,10 +122,25 @@ class App {
     this.Intro.oncomplete(() => postTooltip(api.tooltip, this.context));
 
     this.Intro.onchange((target) => {
-      const current = this.steps.find((step: TooltipStep) => step.element === target);
-      if (current) {
+      let element = target;
+      if (target.classList.contains('introjsFloatingElement')) {
+        const currentItem = this.Intro._introItems.find((item) => item.element === target);
+        if (currentItem.position === TooltipPosition.FLOATING) {
+          const { selector, position } = this.data.find((item) => item.id === currentItem.id) || {};
+          if (selector) {
+            const node = document.querySelector(selector);
+            if (node) {
+              currentItem.element = element = node;
+              currentItem.position = position;
+            }
+          }
+        }
+      }
+      const currentStep = this.steps.find((step: TooltipStep) => step.element === target);
+      if (currentStep) {
+        currentStep.element = element;
         triggerEvent(CustomEventMap.TOOLTIP_VISIBLE, {
-          detail: { current },
+          detail: { currentStep },
         });
       }
     });
@@ -149,8 +164,8 @@ class App {
         })
       );
     } else {
-      this.registerEvent(document, eventType, ({ detail: { current } }: CustomEvent) => {
-        if (current.id == source) {
+      this.registerEvent(document, eventType, ({ detail: { currentStep } }: CustomEvent) => {
+        if (currentStep.id == source) {
           const eventTarget = document.querySelector(target);
           eventTarget && eventTarget[trigger]();
         }
