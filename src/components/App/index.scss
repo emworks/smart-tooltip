@@ -10,12 +10,10 @@ $color-gradient-to: #4f75e2;
 }
 
 .introjs-helperLayer {
-    background: none !important;
-}
-
-.introjs-helperLayer {
+    background: none;
     transform: translate(-4px, -4px);
-    border: 3px solid rgba(255,255,255,.5) !important;
+    border: 3px solid $color-highlight-border;
+    border-radius: 0;
 }
 
 .introjs-fixParent {
@@ -23,7 +21,7 @@ $color-gradient-to: #4f75e2;
 }
 
 .introjs-arrow.top-right {
-    left: auto !important;
+    left: auto;
 }
 
 .introjs-tooltip {
