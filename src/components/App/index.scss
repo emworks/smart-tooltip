@@ -1,3 +1,10 @@
+@import '~intro.js/introjs.css';
+@import '~intro.js/themes/introjs-modern.css';
+
+$color-highlight-border: #2fb6dc;
+$color-gradient-from: #1b86bc;
+$color-gradient-to: #4f75e2;
+
 .no-introjs-overlay .introjs-overlay {
     display: none;
 }
@@ -17,4 +24,27 @@
 
 .introjs-arrow.top-right {
     left: auto !important;
+}
+
+.introjs-tooltip {
+    background: linear-gradient(to right, $color-gradient-from, $color-gradient-to);
+    box-shadow: none;
+    border-radius: 5px;
+}
+
+.introjs-arrow.top {
+    border-color: transparent transparent $color-gradient-from;
+}
+
+.introjs-arrow.top-right {
+    border-color: transparent transparent $color-gradient-to;
+}
+
+.introjs-arrow.left, 
+.introjs-arrow.left-bottom {
+    border-color: transparent $color-gradient-from transparent transparent;
+}
+
+.introjs-tooltiptext {
+    font-size: 14px;
 }

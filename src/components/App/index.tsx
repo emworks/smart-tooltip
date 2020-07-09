@@ -89,8 +89,10 @@ class App {
       if (this.steps.length) {
         const options = {
           steps: this.steps,
+          skipLabel: 'Skip tutorial',
+          doneLabel: 'Ok, got it!',
           showStepNumbers: false,
-          showBullets: this.data.length > 1,
+          showBullets: false,
           overlayOpacity: 0.3,
         };
 
