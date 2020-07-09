@@ -87,15 +87,16 @@ class App {
       this.steps = this.data.map(normalize);
 
       if (this.steps.length) {
-        // a workaround to initialize intro.js without starting a demo
-        document.body.classList.add('no-introjs-overlay');
-        this.Intro.setOptions({
+        const options = {
           steps: this.steps,
           showStepNumbers: false,
+          showBullets: this.data.length > 1,
           overlayOpacity: 0.3,
-        })
-          .start()
-          .exit();
+        };
+
+        // a workaround to initialize intro.js without starting a demo
+        document.body.classList.add('no-introjs-overlay');
+        this.Intro.setOptions(options).start().exit();
 
         setTimeout(() => {
           document.body.classList.remove('no-introjs-overlay');
@@ -145,7 +146,7 @@ class App {
             this.eventData.forEach((event) => {
               if (event.source == current.id) {
                 const eventTarget = document.querySelector(event.target);
-                eventTarget && eventTarget[event.trigger]();
+                setTimeout(() => eventTarget && eventTarget[event.trigger](), 0);
               }
             });
             const node = document.querySelector(selector);
@@ -189,7 +190,7 @@ class App {
       this.registerEvent(document, eventType, (data?: CustomEvent) => {
         if (data?.detail?.current.id == source) {
           const eventTarget = document.querySelector(target);
-          eventTarget && eventTarget[trigger]();
+          setTimeout(() => eventTarget && eventTarget[trigger](), 0);
         }
       });
     }
