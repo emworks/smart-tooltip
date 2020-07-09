@@ -1,4 +1,4 @@
-const createExternalRefsHook = (context) => (selectors, timeout = 3000) => {
+const createExternalRefsHook = (context) => (selectors, timeout = 1000) => {
   const refs = new Map();
 
   let observer: MutationObserver;

@@ -1,5 +1,5 @@
 import { api } from 'src/variables';
-import { TooltipEvent, DOMEventMap, CustomEventMap, TooltipContext } from 'src/types';
+import { TooltipEvent, DOMEventMap, CustomActionMap, CustomEventMap, TooltipContext } from 'src/types';
 
 // eslint-disable-next-line no-underscore-dangle
 const _data: Array<TooltipEvent> = [
@@ -7,7 +7,7 @@ const _data: Array<TooltipEvent> = [
     id: '1',
     eventType: DOMEventMap.CLICK,
     source: '#first',
-    trigger: CustomEventMap.TOOLTIP_SHOW,
+    trigger: CustomActionMap.TOOLTIP_SHOW,
     target: '1',
     user: 'admin',
     host: 'http://localhost:9000',

@@ -45,9 +45,12 @@ export enum DOMEventMap {
   CLICK = 'click',
 }
 
-export enum CustomEventMap {
+export enum CustomActionMap {
   TOOLTIP_SHOW = 'tooltipshow',
   TOOLTIP_HIDE = 'tooltiphide',
+}
+
+export enum CustomEventMap {
   TOOLTIP_VISIBLE = 'tooltipvisible',
 }
 
@@ -55,6 +58,6 @@ export interface TooltipEvent extends TooltipContext {
   id: string;
   eventType: DOMEventMap | CustomEventMap;
   source: string;
-  trigger: DOMEventMap | CustomEventMap;
+  trigger: DOMEventMap | CustomActionMap;
   target: string;
 }
