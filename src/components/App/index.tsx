@@ -136,7 +136,12 @@ class App {
       this.unbindEvents();
     }
 
-    this.Intro.oncomplete(() => postTooltip(api.tooltip, this.context));
+    this.Intro.oncomplete(async () => {
+      await postTooltip(api.tooltip, this.context);
+      triggerEvent(CustomEventMap.TOOLTIP_COMPLETE, {
+        detail: { current: this.steps[this.steps.length - 1] },
+      });
+    });
 
     this.Intro.onbeforechange((target) => {
       let current;
@@ -168,7 +173,9 @@ class App {
       }
     });
 
-    this.Intro.onexit(this.unbindEvents.bind(this));
+    this.Intro.onexit(() => {
+      setTimeout(() => this.unbindEvents.bind(this), 0);
+    });
 
     this.eventData = events || (await getEvent(api.event, this.context));
 

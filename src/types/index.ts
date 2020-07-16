@@ -52,6 +52,7 @@ export enum CustomActionMap {
 
 export enum CustomEventMap {
   TOOLTIP_VISIBLE = 'tooltipvisible',
+  TOOLTIP_COMPLETE = 'tooltipcomplete',
 }
 
 export interface TooltipEvent extends TooltipContext {
