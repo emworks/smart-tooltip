@@ -4,6 +4,7 @@
 $color-highlight-border: #2fb6dc;
 $color-gradient-from: #1b86bc;
 $color-gradient-to: #4f75e2;
+$tooltip-padding: 15px;
 
 .no-introjs-overlay .introjs-overlay {
     display: none;
@@ -16,10 +17,6 @@ $color-gradient-to: #4f75e2;
     border-radius: 0;
 }
 
-.introjs-fixParent {
-    position: static;
-}
-
 .introjs-arrow.top-right {
     left: auto;
 }
@@ -28,6 +25,10 @@ $color-gradient-to: #4f75e2;
     background: linear-gradient(to right, $color-gradient-from, $color-gradient-to);
     box-shadow: none;
     border-radius: 5px;
+    padding: 0 0 10px;
+    min-width: 300px;
+    max-width: 400px;
+    transform: translate(4px, 4px);
 }
 
 .introjs-arrow.top {
@@ -45,4 +46,18 @@ $color-gradient-to: #4f75e2;
 
 .introjs-tooltiptext {
     font-size: 14px;
+
+    img {
+        width: 100%;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        margin-top: 15px;
+        padding: 0 $tooltip-padding;
+    }
+
+    p {
+        margin-bottom: 0;
+        padding: 0 $tooltip-padding;
+    }
 }

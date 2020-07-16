@@ -24,7 +24,7 @@ const createExternalRefsHook = (context) => (selectors, timeout = 0) => {
     };
 
     observer = new MutationObserver(updateRefs);
-    observer.observe(context, { childList: true, subtree: true });
+    observer.observe(context, { childList: true, subtree: true, attributes: true });
 
     updateRefs();
 
