@@ -81,7 +81,7 @@ class App {
     const selectors = this.data.map(({ selector }) => selector);
 
     try {
-      const refs = await useExternalRefs(selectors);
+      const refs = await useExternalRefs(selectors, 0);
 
       const normalize = this.getNormalizer(refs);
       this.steps = this.data.map(normalize);

@@ -28,10 +28,12 @@ const createExternalRefsHook = (context) => (selectors, timeout = 1000) => {
 
     updateRefs();
 
-    setTimeout(() => {
-      console.warn(`Found ${refs.size} out in [${selectors}] after ${timeout}ms`);
-      resolve(refs);
-    }, timeout);
+    if (timeout) {
+      setTimeout(() => {
+        console.warn(`Found ${refs.size} out in [${selectors}] after ${timeout}ms`);
+        resolve(refs);
+      }, timeout);
+    }
   });
 };
 
